@@ -1,0 +1,23 @@
+name: "Feature CI"
+
+on:
+  push:
+    branches-ignore:
+      - main # ignore the main branch all other branches are feature branches
+
+jobs:
+  ci-build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .Net
+      - uses: actions/setup-dotnet@v2
+      - with:
+          dotnet-version: 6.0.x
+      - name: Restore
+        run: dotnet Restore
+      - name: Build
+        run: dontnet build --no-restore
+      - name: Test
+        run: dotnet Test --no-build --verbosity normal /p:CollectCoverage=true
